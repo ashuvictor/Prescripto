@@ -3,9 +3,9 @@ import './index.css';
 
 const App = () => {
   return (
-    <div className='text-green-500'>
-      Hello
-    </div>
+    <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
   )
 }
 
