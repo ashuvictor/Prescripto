@@ -89,7 +89,7 @@ const Doctors = () => {
             <div
               key={index}
               onClick={() => {
-                navigate(`appointement/${item._id}`);
+                navigate(`appointment/${item._id}`);
               }}
               className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition all duration-500"
             >
