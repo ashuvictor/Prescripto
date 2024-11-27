@@ -3,15 +3,15 @@ import jwt from "jsonwebtoken";
 const authAdmin = async (req, res, next) => {
   try {
     // Extract the token from the headers
-    const { atoken } = req.headers;
+    const { aToken } = req.headers;
 
     // Check if the token exists
-    if (!atoken) {
+    if (!aToken) {
       return res.status(401).json({ success: false, message: "Not Authorized. Token is missing." });
     }
 
     // Verify the token
-    const decodedToken = jwt.verify(atoken, process.env.JWT_SECRET);
+    const decodedToken = jwt.verify(aToken, process.env.JWT_SECRET);
 
     // Check if the token matches the admin credentials
     if (
