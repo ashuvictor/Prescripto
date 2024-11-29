@@ -9,11 +9,9 @@ const AppContextProvider = ({ children }) => {
   const currencySymbol = "$";
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [doctors, setDoctors] = useState([]);
+  const [token,setToken] = useState(localStorage.getItem('token')?localStorage.getItem('token'):"")
 
-  const value = {
-    doctors,
-    currencySymbol,
-  };
+
   const getDoctorsData = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/doctor/list");
@@ -32,6 +30,14 @@ const AppContextProvider = ({ children }) => {
   useEffect(() => {
     getDoctorsData();
   }, []);
+
+  const value = {
+    doctors,
+    currencySymbol,
+    token,
+    setToken,
+    backendUrl
+  };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

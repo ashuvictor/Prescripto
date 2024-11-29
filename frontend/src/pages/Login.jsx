@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const {backendUrl,token,setToken} = useContext(AppContext)
+  const navigate = useNavigate();
   const [state, setState] = useState("Sign Up"); // Manage form state (Sign Up or Login)
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -15,6 +20,33 @@ const Login = () => {
       return;
     }
 
+    try{
+      if(state ==="Sign Up"){
+        const {data} = await axios.post(backendUrl+'/api/user/register',{name,password,email})
+        if(data.success){
+          localStorage.setItem('token',data.token)
+          setToken(data.token)
+        }else{
+          toast.error(data.message)
+        }
+
+      }
+      else{
+        const {data} = await axios.post(backendUrl+'/api/user/login',{password,email})
+        if(data.success){
+          localStorage.setItem('token',data.token)
+          setToken(data.token)
+        }else{
+          toast.error(data.message)
+        }
+
+      }
+
+    }catch(e) {
+      toast.error(e.message)
+
+    }
+
     // Logic to handle login or sign-up (e.g., API call)
     if (state === "Sign Up") {
       console.log("Sign Up", { name, email, password });
@@ -22,6 +54,13 @@ const Login = () => {
       console.log("Login", { email, password });
     }
   };
+
+  useEffect(()=>{
+    if(token){
+      navigate('/')
+
+    }
+  },[token])
 
   return (
     <form onSubmit={onSubmitHandler} className="min-h-[80vh] flex items-center">
