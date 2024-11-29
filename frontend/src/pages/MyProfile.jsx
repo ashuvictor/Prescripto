@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
+import { toast } from "react-toastify";
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,6 +11,31 @@ const MyProfile = () => {
 
   // Update profile data to the backend
   const updateUserProfileData = async () => {
+    try {
+      const formdata = new Formdata();
+      formdata.append("name", userData.name);
+      formdata.append("phone", userData.phone);
+      formdata.append("address", JSON.stringify(userData.address));
+      formdata.append("gender", userData.gender);
+      formdata.append("dob", userData.dob);
+
+      image && formdata.append("image", image);
+      const { data } = await axios.post(
+        backendUrl + "/api/user/update-profile",
+        formdata,
+        { headers: { token } }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        await loadUserProfile();
+        setIsEditing(false);
+        setImage(false);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleInputChange = (e) => {
